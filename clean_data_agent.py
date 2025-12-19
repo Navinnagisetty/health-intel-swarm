@@ -5,7 +5,7 @@ from crewai_tools import CodeInterpreterTool
 
 # --- 1. CONFIGURATION ---
 # We use the key and model that successfully worked for you
-os.environ["GOOGLE_API_KEY"] = "AIzaSyAzB-1NhrNN2jGWWzWbGUGtBXrUnRgJ7zo"
+os.environ["GOOGLE_API_KEY"] = "os.getenv("GOOGLE_API_KEY")"
 MY_MODEL_NAME = "gemini-flash-latest"
 
 # 2. Setup Brain

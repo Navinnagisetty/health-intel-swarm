@@ -5,7 +5,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from crewai_tools import CodeInterpreterTool
 
 # --- CONFIGURATION ---
-os.environ["GOOGLE_API_KEY"] = "AIzaSyAzB-1NhrNN2jGWWzWbGUGtBXrUnRgJ7zo"
+os.environ["GOOGLE_API_KEY"] = "os.getenv("GOOGLE_API_KEY")"
 # We stick to the model that works, just running it slower (one agent)
 MY_MODEL_NAME = "gemini-flash-latest"
 

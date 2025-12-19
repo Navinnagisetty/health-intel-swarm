@@ -5,7 +5,7 @@ from crewai_tools import CodeInterpreterTool
 
 # --- 1. FORCE THE KEY INTO THE SYSTEM ---
 # This is the "Nuclear Option". It sets the key globally for this script.
-os.environ["GOOGLE_API_KEY"] = "AIzaSyAzB-1NhrNN2jGWWzWbGUGtBXrUnRgJ7zo"
+os.environ["GOOGLE_API_KEY"] = "os.getenv("GOOGLE_API_KEY")"
 
 # --- 2. CONFIGURATION ---
 MY_MODEL_NAME = "gemini-flash-latest"

@@ -4,7 +4,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from crewai_tools import CodeInterpreterTool
 
 # --- CONFIGURATION ---
-os.environ["GOOGLE_API_KEY"] = "AIzaSyAzB-1NhrNN2jGWWzWbGUGtBXrUnRgJ7zo"
+os.environ["GOOGLE_API_KEY"] = "os.getenv("GOOGLE_API_KEY")"
 # We switch to the standard 1.5 Flash model which has higher limits
 MY_MODEL_NAME = "gemini-flash-latest"
 
