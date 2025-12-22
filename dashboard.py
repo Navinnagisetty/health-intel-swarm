@@ -3,18 +3,14 @@ import pandas as pd
 import numpy as np
 import os
 import sys
-import subprocess
 import time
 import matplotlib.pyplot as plt
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_experimental.agents import create_pandas_dataframe_agent
-from dotenv import load_dotenv  # <--- SECURITY IMPORT
+from dotenv import load_dotenv
 
-# --- 1. LOAD SECRETS (SECURITY) ---
-# This looks for the .env file. If found, it loads the key.
+# --- 1. LOAD SECRETS ---
 load_dotenv()
-
-# Check if key exists
 if "GOOGLE_API_KEY" not in os.environ:
     st.error("🚨 API Key missing! Please create a .env file with GOOGLE_API_KEY=your_key")
     st.stop()
@@ -51,7 +47,7 @@ with tab2:
         st.error(f"🚨 {len(suspicious)} High Risk Providers")
         st.dataframe(suspicious[['State_Full', 'Z_Score', 'Total_Revenue']])
 
-# TAB 3: AI ANALYST (With Retry Logic)
+# TAB 3: AI ANALYST (Lightweight Version)
 with tab3:
     st.header("Chat with Data")
     q = st.text_input("Ask a question (e.g., 'Who is the top biller in California?'):")
@@ -59,20 +55,25 @@ with tab3:
     if q and st.button("🚀 Ask AI"):
         with st.spinner('Thinking...'):
             try:
-                # Use the reliable model name
-                llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", temperature=0)
-                agent = create_pandas_dataframe_agent(llm, df, verbose=True, allow_dangerous_code=True)
-                st.write(agent.run(q))
+                # SWITCH: Using 'gemini-flash-latest' for speed and lower quota usage
+                llm = ChatGoogleGenerativeAI(model="models/gemini-flash-latest", temperature=0)
+                
+                agent = create_pandas_dataframe_agent(
+                    llm, 
+                    df, 
+                    verbose=True, 
+                    allow_dangerous_code=True,
+                    handle_parsing_errors=True # Helps prevent crashes
+                )
+                
+                # FIXED: Using .invoke() instead of .run() to stop warnings
+                response = agent.invoke({"input": q})
+                st.write(response['output'])
                 
             except Exception as e:
-                # RETRY LOGIC for 429 Errors
+                # If we hit the speed limit, tell the user gracefully
                 if "429" in str(e):
-                    st.warning("🚦 High Traffic (Quota Limit). Retrying in 5 seconds...")
-                    time.sleep(6)
-                    try:
-                        st.write(agent.run(q))
-                    except Exception as e2:
-                        st.error("Still busy! Please wait 1 minute.")
+                    st.warning("🚦 Speed Limit Hit (Free Tier). Please wait 1 minute and try again.")
                 else:
                     st.error(f"Error: {e}")
 
