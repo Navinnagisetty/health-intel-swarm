@@ -57,15 +57,14 @@ with tab3:
             try:
                 # SWITCH: Using 'gemini-flash-latest' for speed and lower quota usage
                 llm = ChatGoogleGenerativeAI(model="models/gemini-flash-latest", temperature=0)
-                
-                agent = create_pandas_dataframe_agent(
-                    llm, 
-                    df, 
-                    verbose=True, 
-                    allow_dangerous_code=True,
-                    handle_parsing_errors=True # Helps prevent crashes
-                )
-                
+                # Create the agent with error handling enabled
+        agent = create_pandas_dataframe_agent(
+            llm,
+            df,
+            verbose=True,
+            allow_dangerous_code=True,
+            handle_parsing_errors=True)
+                                
                 # FIXED: Using .invoke() instead of .run() to stop warnings
                 response = agent.invoke({"input": q})
                 st.write(response['output'])
