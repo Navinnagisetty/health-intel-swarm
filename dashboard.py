@@ -104,3 +104,14 @@ with tab4:
         
         st.pyplot(fig)
         st.success(f"Strategy: Stop auditing after the top {peak_idx} riskiest providers.")
+# --- Download Section ---
+    st.sidebar.markdown("---")
+    csv_data = df.to_csv(index=False).encode('utf-8')
+    
+    st.sidebar.download_button(
+        label="📥 Download Full Report",
+        data=csv_data,
+        file_name='health_intel_report.csv',
+        mime='text/csv',
+        help="Click to download the analyzed data as a CSV file."
+    )
