@@ -20,8 +20,12 @@ st.set_page_config(page_title="HealthIntel Pro", layout="wide", page_icon="🏥"
 st.title("🏥 HealthIntel: Analytics Swarm")
 
 # --- 3. LOAD DATA ---
-if os.path.exists('enriched_providers.csv'):
-    df = pd.read_csv('enriched_providers.csv')
+import pathlib
+BASE_DIR = pathlib.Path(__file__).parent
+data_file = BASE_DIR / 'data' / 'enriched_providers.csv'
+
+if data_file.exists():
+    df = pd.read_csv(data_file)
 else:
     df = pd.DataFrame()
 
@@ -51,28 +55,23 @@ with tab2:
 with tab3:
     st.header("Chat with Data")
     q = st.text_input("Ask a question (e.g., 'Who is the top biller in California?'):")
-    
+
     if q and st.button("🚀 Ask AI"):
         with st.spinner('Thinking...'):
             try:
-                # SWITCH: Using 'gemini-flash-latest' for speed and lower quota usage
                 llm = ChatGoogleGenerativeAI(model="models/gemini-flash-latest", temperature=0)
-                # Create the agent with error handling enabled
-        agent = create_pandas_dataframe_agent(
-            llm,
-            df,
-            verbose=True,
-            allow_dangerous_code=True,
-            handle_parsing_errors=True)
-                                
-                # FIXED: Using .invoke() instead of .run() to stop warnings
+                agent = create_pandas_dataframe_agent(
+                    llm,
+                    df,
+                    verbose=True,
+                    allow_dangerous_code=True,
+                    handle_parsing_errors=True
+                )
                 response = agent.invoke({"input": q})
                 st.write(response['output'])
-                
             except Exception as e:
-                # If we hit the speed limit, tell the user gracefully
                 if "429" in str(e):
-                    st.warning("🚦 Speed Limit Hit (Free Tier). Please wait 1 minute and try again.")
+                    st.warning("⚠️ Speed Limit Hit (Free Tier). Please wait 1 minute and try again.")
                 else:
                     st.error(f"Error: {e}")
 

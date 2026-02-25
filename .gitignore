@@ -1,5 +1,7 @@
-venv/
 .env
+venv/
 __pycache__/
-*.csv
-*.png
+*.pyc
+outpatient.csv
+beneficiary_2024.csv
+*.zip
