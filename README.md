@@ -109,7 +109,7 @@ health-intel-swarm/
 ## 🚀 Run Locally
 
 ```bash
-git clone https://github.com/Navin1114-collab/health-intel-swarm.git
+git clone https://github.com/navinnagisetty/health-intel-swarm.git
 cd health-intel-swarm
 pip install -r requirements.txt
 
@@ -135,4 +135,4 @@ python investigator_agent.py
 **Navin Kumar Nagisetty**  
 📧 navinnagisetty@gmail.com  
 💼 [LinkedIn](https://www.linkedin.com/in/navinnagisetty/)  
-🐙 [GitHub](https://github.com/Navin1114-collab)
+🐙 [GitHub](https://github.com/navinnagisetty)
